@@ -14,7 +14,7 @@
   "dependencies": {
     "database": "github:sandisondata/database",
     "database-helpers": "github:sandisondata/database-helpers",
-    "node-errors": "github:gwfortington/node-errors"
+    "node-debug": "github:gwfortington/node-debug"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.6",
