@@ -14,10 +14,12 @@
   "dependencies": {
     "database": "github:sandisondata/database",
     "database-helpers": "github:sandisondata/database-helpers",
-    "node-debug": "github:gwfortington/node-debug"
+    "node-debug": "github:gwfortington/node-debug",
+    "node-utilities": "github:gwfortington/node-utilities"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.6",
+    "@types/node": "^22.2.0",
     "@types/pg": "^8.11.6",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
