@@ -1,5 +1,12 @@
 import { Query } from 'database';
-import * as db from 'database-helpers';
+import {
+  checkPrimaryKey,
+  checkUniqueKey,
+  createRow,
+  deleteRow,
+  findByPrimaryKey,
+  updateRow,
+} from 'database-helpers';
 import { Debug, MessageType } from 'node-debug';
 import { objectsEqual, pick } from 'node-utilities';
 
@@ -9,36 +16,47 @@ const debugSource = 'user.service';
 const tableName = '_users';
 const instanceName = 'user';
 
-type PrimaryKey = { user_uuid: string };
+export type PrimaryKey = {
+  user_uuid: string;
+};
 
-type Data = {
+export type Data = {
   is_administrator: boolean;
   is_disabled: boolean;
   is_inactive: boolean;
   api_key?: string | null;
 };
 
-const dataKeys = ['is_administrator', 'is_disabled', 'is_inactive', 'api_key'];
+export const dataColumnNames = [
+  'is_administrator',
+  'is_disabled',
+  'is_inactive',
+  'api_key',
+];
 
 export type CreateData = PrimaryKey & Data;
+export type Row = PrimaryKey & Required<Data>;
 export type UpdateData = Partial<Data>;
 
 const create = async (query: Query, createData: CreateData) => {
   debug = new Debug(`${debugSource}.create`);
   debug.write(MessageType.Entry, `createData=${JSON.stringify(createData)}`);
-  const primaryKey = { user_uuid: createData.user_uuid };
+  const primaryKey: PrimaryKey = { user_uuid: createData.user_uuid };
   debug.write(MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Checking primary key...');
-  await db.checkPrimaryKey(query, tableName, instanceName, primaryKey);
+  await checkPrimaryKey(query, tableName, instanceName, primaryKey);
   debug.write(MessageType.Step, 'Validating data...');
-  if (createData.api_key !== null) {
+  if (
+    typeof createData.api_key !== 'undefined' &&
+    createData.api_key !== null
+  ) {
     const uniqueKey = { api_key: createData.api_key };
     debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
     debug.write(MessageType.Step, 'Checking unique key...');
-    await db.checkUniqueKey(query, tableName, instanceName, uniqueKey);
+    await checkUniqueKey(query, tableName, instanceName, uniqueKey);
   }
   debug.write(MessageType.Step, 'Creating row...');
-  const createdRow = await db.createRow(query, tableName, createData);
+  const createdRow = (await createRow(query, tableName, createData)) as Row;
   debug.write(MessageType.Exit, `createdRow=${JSON.stringify(createdRow)}`);
   return createdRow;
 };
@@ -48,8 +66,9 @@ const find = async (query: Query) => {
   debug = new Debug(`${debugSource}.find`);
   debug.write(MessageType.Entry);
   debug.write(MessageType.Step, 'Finding rows...');
-  const rows: object[] = (await query(`SELECT * FROM ${tableName}`)).rows;
-  debug.write(MessageType.Exit, `rows=${JSON.stringify(rows)}`);
+  const rows = (await query(`SELECT * FROM ${tableName} ORDER BY user_uuid`))
+    .rows as Row[];
+  debug.write(MessageType.Exit, `rows(3)=${JSON.stringify(rows.slice(0, 3))}`);
   return rows;
 };
 
@@ -57,12 +76,12 @@ const findOne = async (query: Query, primaryKey: PrimaryKey) => {
   debug = new Debug(`${debugSource}.findOne`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
-  const row = await db.findByPrimaryKey(
+  const row = (await findByPrimaryKey(
     query,
     tableName,
     instanceName,
     primaryKey,
-  );
+  )) as Row;
   debug.write(MessageType.Exit, `row=${JSON.stringify(row)}`);
   return row;
 };
@@ -78,26 +97,36 @@ const update = async (
     `primaryKey=${JSON.stringify(primaryKey)};updateData=${JSON.stringify(updateData)}`,
   );
   debug.write(MessageType.Step, 'Finding row by primary key...');
-  const row = await db.findByPrimaryKey(
+  const row = (await findByPrimaryKey(
     query,
     tableName,
     instanceName,
     primaryKey,
     true,
-  );
+  )) as Row;
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
-  const mergedRow = Object.assign({}, row, updateData);
-  let updatedRow: object = Object.assign({}, mergedRow);
-  if (!objectsEqual(pick(mergedRow, dataKeys), pick(row, dataKeys))) {
+  const mergedRow: Row = Object.assign({}, row, updateData);
+  let updatedRow: Row = Object.assign({}, mergedRow);
+  if (
+    !objectsEqual(pick(mergedRow, dataColumnNames), pick(row, dataColumnNames))
+  ) {
     debug.write(MessageType.Step, 'Validating data...');
-    if (![null, mergedRow.api_key].includes(updateData.api_key)) {
+    if (
+      typeof updateData.api_key !== 'undefined' &&
+      ![null, mergedRow.api_key].includes(updateData.api_key)
+    ) {
       const uniqueKey = { api_key: updateData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
       debug.write(MessageType.Step, 'Checking unique key...');
-      await db.checkUniqueKey(query, tableName, instanceName, uniqueKey);
+      await checkUniqueKey(query, tableName, instanceName, uniqueKey);
     }
     debug.write(MessageType.Step, 'Updating row...');
-    updatedRow = await db.updateRow(query, tableName, primaryKey, updateData);
+    updatedRow = (await updateRow(
+      query,
+      tableName,
+      primaryKey,
+      updateData,
+    )) as Row;
   }
   debug.write(MessageType.Exit, `updatedRow=${JSON.stringify(updatedRow)}`);
   return updatedRow;
@@ -107,9 +136,16 @@ const del = async (query: Query, primaryKey: PrimaryKey) => {
   debug = new Debug(`${debugSource}.delete`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
-  await db.findByPrimaryKey(query, tableName, instanceName, primaryKey, true);
+  const row = (await findByPrimaryKey(
+    query,
+    tableName,
+    instanceName,
+    primaryKey,
+    true,
+  )) as Row;
+  debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   debug.write(MessageType.Step, 'Deleting row...');
-  await db.deleteRow(query, tableName, primaryKey);
+  await deleteRow(query, tableName, primaryKey);
 };
 
 export { create, find, findOne, update, del as delete };
