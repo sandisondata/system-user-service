@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete = exports.update = exports.findOne = exports.find = exports.create = exports.dataColumnNames = void 0;
+exports.delete_ = exports.update = exports.findOne = exports.find = exports.create = exports.dataColumnNames = void 0;
 const database_helpers_1 = require("database-helpers");
 const node_debug_1 = require("node-debug");
 const node_utilities_1 = require("node-utilities");
@@ -17,6 +17,7 @@ let debug;
 const debugSource = 'user.service';
 const tableName = '_users';
 const instanceName = 'user';
+const debugRows = 3;
 exports.dataColumnNames = [
     'is_administrator',
     'is_disabled',
@@ -51,7 +52,7 @@ const find = (query) => __awaiter(void 0, void 0, void 0, function* () {
     debug.write(node_debug_1.MessageType.Step, 'Finding rows...');
     const rows = (yield query(`SELECT * FROM ${tableName} ORDER BY user_uuid`))
         .rows;
-    debug.write(node_debug_1.MessageType.Exit, `rows(3)=${JSON.stringify(rows.slice(0, 3))}`);
+    debug.write(node_debug_1.MessageType.Exit, `rows(${debugRows})=${JSON.stringify(rows.slice(0, debugRows))}`);
     return rows;
 });
 exports.find = find;
@@ -75,7 +76,7 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
     if (!(0, node_utilities_1.objectsEqual)((0, node_utilities_1.pick)(mergedRow, exports.dataColumnNames), (0, node_utilities_1.pick)(row, exports.dataColumnNames))) {
         debug.write(node_debug_1.MessageType.Step, 'Validating data...');
         if (typeof updateData.api_key !== 'undefined' &&
-            ![null, mergedRow.api_key].includes(updateData.api_key)) {
+            updateData.api_key !== null) {
             const uniqueKey = { api_key: updateData.api_key };
             debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
             debug.write(node_debug_1.MessageType.Step, 'Checking unique key...');
@@ -88,7 +89,7 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
     return updatedRow;
 });
 exports.update = update;
-const del = (query, primaryKey) => __awaiter(void 0, void 0, void 0, function* () {
+const delete_ = (query, primaryKey) => __awaiter(void 0, void 0, void 0, function* () {
     debug = new node_debug_1.Debug(`${debugSource}.delete`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
@@ -97,4 +98,4 @@ const del = (query, primaryKey) => __awaiter(void 0, void 0, void 0, function* (
     debug.write(node_debug_1.MessageType.Step, 'Deleting row...');
     yield (0, database_helpers_1.deleteRow)(query, tableName, primaryKey);
 });
-exports.delete = del;
+exports.delete_ = delete_;
