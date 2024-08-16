@@ -10,11 +10,11 @@ import {
 import { Debug, MessageType } from 'node-debug';
 import { objectsEqual, pick } from 'node-utilities';
 
-let debug: Debug;
 const debugSource = 'user.service';
+const debugRows = 3;
+
 const tableName = '_users';
 const instanceName = 'user';
-const debugRows = 3;
 
 export type PrimaryKey = {
   user_uuid: string;
@@ -39,7 +39,7 @@ export type Row = PrimaryKey & Required<Data>;
 export type UpdateData = Partial<Data>;
 
 export const create = async (query: Query, createData: CreateData) => {
-  debug = new Debug(`${debugSource}.create`);
+  const debug = new Debug(`${debugSource}.create`);
   debug.write(MessageType.Entry, `createData=${JSON.stringify(createData)}`);
   const primaryKey: PrimaryKey = { user_uuid: createData.user_uuid };
   debug.write(MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
@@ -63,7 +63,7 @@ export const create = async (query: Query, createData: CreateData) => {
 
 // TODO: query parameters + add actual query to helpers
 export const find = async (query: Query) => {
-  debug = new Debug(`${debugSource}.find`);
+  const debug = new Debug(`${debugSource}.find`);
   debug.write(MessageType.Entry);
   debug.write(MessageType.Step, 'Finding rows...');
   const rows = (await query(`SELECT * FROM ${tableName} ORDER BY user_uuid`))
@@ -76,7 +76,7 @@ export const find = async (query: Query) => {
 };
 
 export const findOne = async (query: Query, primaryKey: PrimaryKey) => {
-  debug = new Debug(`${debugSource}.findOne`);
+  const debug = new Debug(`${debugSource}.findOne`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
   const row = (await findByPrimaryKey(
@@ -94,7 +94,7 @@ export const update = async (
   primaryKey: PrimaryKey,
   updateData: UpdateData,
 ) => {
-  debug = new Debug(`${debugSource}.update`);
+  const debug = new Debug(`${debugSource}.update`);
   debug.write(
     MessageType.Entry,
     `primaryKey=${JSON.stringify(primaryKey)};updateData=${JSON.stringify(updateData)}`,
@@ -136,7 +136,7 @@ export const update = async (
 };
 
 export const delete_ = async (query: Query, primaryKey: PrimaryKey) => {
-  debug = new Debug(`${debugSource}.delete`);
+  const debug = new Debug(`${debugSource}.delete`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
   const row = (await findByPrimaryKey(
@@ -149,4 +149,5 @@ export const delete_ = async (query: Query, primaryKey: PrimaryKey) => {
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   debug.write(MessageType.Step, 'Deleting row...');
   await deleteRow(query, tableName, primaryKey);
+  debug.write(MessageType.Exit);
 };

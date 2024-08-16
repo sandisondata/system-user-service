@@ -13,11 +13,10 @@ exports.delete_ = exports.update = exports.findOne = exports.find = exports.crea
 const database_helpers_1 = require("database-helpers");
 const node_debug_1 = require("node-debug");
 const node_utilities_1 = require("node-utilities");
-let debug;
 const debugSource = 'user.service';
+const debugRows = 3;
 const tableName = '_users';
 const instanceName = 'user';
-const debugRows = 3;
 exports.dataColumnNames = [
     'is_administrator',
     'is_disabled',
@@ -25,7 +24,7 @@ exports.dataColumnNames = [
     'api_key',
 ];
 const create = (query, createData) => __awaiter(void 0, void 0, void 0, function* () {
-    debug = new node_debug_1.Debug(`${debugSource}.create`);
+    const debug = new node_debug_1.Debug(`${debugSource}.create`);
     debug.write(node_debug_1.MessageType.Entry, `createData=${JSON.stringify(createData)}`);
     const primaryKey = { user_uuid: createData.user_uuid };
     debug.write(node_debug_1.MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
@@ -47,7 +46,7 @@ const create = (query, createData) => __awaiter(void 0, void 0, void 0, function
 exports.create = create;
 // TODO: query parameters + add actual query to helpers
 const find = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    debug = new node_debug_1.Debug(`${debugSource}.find`);
+    const debug = new node_debug_1.Debug(`${debugSource}.find`);
     debug.write(node_debug_1.MessageType.Entry);
     debug.write(node_debug_1.MessageType.Step, 'Finding rows...');
     const rows = (yield query(`SELECT * FROM ${tableName} ORDER BY user_uuid`))
@@ -57,7 +56,7 @@ const find = (query) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.find = find;
 const findOne = (query, primaryKey) => __awaiter(void 0, void 0, void 0, function* () {
-    debug = new node_debug_1.Debug(`${debugSource}.findOne`);
+    const debug = new node_debug_1.Debug(`${debugSource}.findOne`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
     const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey));
@@ -66,7 +65,7 @@ const findOne = (query, primaryKey) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.findOne = findOne;
 const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-    debug = new node_debug_1.Debug(`${debugSource}.update`);
+    const debug = new node_debug_1.Debug(`${debugSource}.update`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)};updateData=${JSON.stringify(updateData)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
     const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, true));
@@ -90,12 +89,13 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
 });
 exports.update = update;
 const delete_ = (query, primaryKey) => __awaiter(void 0, void 0, void 0, function* () {
-    debug = new node_debug_1.Debug(`${debugSource}.delete`);
+    const debug = new node_debug_1.Debug(`${debugSource}.delete`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
     const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, true));
     debug.write(node_debug_1.MessageType.Value, `row=${JSON.stringify(row)}`);
     debug.write(node_debug_1.MessageType.Step, 'Deleting row...');
     yield (0, database_helpers_1.deleteRow)(query, tableName, primaryKey);
+    debug.write(node_debug_1.MessageType.Exit);
 });
 exports.delete_ = delete_;
