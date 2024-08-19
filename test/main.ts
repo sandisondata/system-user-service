@@ -21,12 +21,14 @@ describe('main', (suiteContext) => {
   it('create', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
-    await create(database.query, {
-      user_uuid: uuid,
-      is_administrator: true,
-      is_enabled: true,
-      is_active: true,
-      api_key: '<api_key>',
+    await database.transaction(async (query) => {
+      await create(query, {
+        user_uuid: uuid,
+        is_administrator: true,
+        is_enabled: true,
+        is_active: true,
+        api_key: '<api_key>',
+      });
     });
     debug.write(MessageType.Exit);
     assert.ok(true);
