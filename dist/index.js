@@ -19,8 +19,8 @@ const tableName = '_users';
 const instanceName = 'user';
 exports.dataColumnNames = [
     'is_administrator',
-    'is_disabled',
-    'is_inactive',
+    'is_enabled',
+    'is_active',
     'api_key',
 ];
 const create = (query, createData) => __awaiter(void 0, void 0, void 0, function* () {

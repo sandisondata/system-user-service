@@ -22,15 +22,15 @@ export type PrimaryKey = {
 
 export type Data = {
   is_administrator: boolean;
-  is_disabled: boolean;
-  is_inactive: boolean;
+  is_enabled: boolean;
+  is_active: boolean;
   api_key?: string | null;
 };
 
 export const dataColumnNames = [
   'is_administrator',
-  'is_disabled',
-  'is_inactive',
+  'is_enabled',
+  'is_active',
   'api_key',
 ];
 

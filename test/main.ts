@@ -24,8 +24,8 @@ describe('main', (suiteContext) => {
     await create(database.query, {
       user_uuid: uuid,
       is_administrator: true,
-      is_disabled: false,
-      is_inactive: false,
+      is_enabled: true,
+      is_active: true,
       api_key: '<api_key>',
     });
     debug.write(MessageType.Exit);

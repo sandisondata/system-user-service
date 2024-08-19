@@ -4,8 +4,8 @@ export type PrimaryKey = {
 };
 export type Data = {
     is_administrator: boolean;
-    is_disabled: boolean;
-    is_inactive: boolean;
+    is_enabled: boolean;
+    is_active: boolean;
     api_key?: string | null;
 };
 export declare const dataColumnNames: string[];
