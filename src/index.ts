@@ -116,7 +116,8 @@ export const update = async (
     debug.write(MessageType.Step, 'Validating data...');
     if (
       typeof updateData.api_key !== 'undefined' &&
-      updateData.api_key !== null
+      updateData.api_key !== null &&
+      updateData.api_key !== mergedRow.api_key
     ) {
       const uniqueKey = { api_key: updateData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
