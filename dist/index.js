@@ -76,7 +76,7 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
         debug.write(node_debug_1.MessageType.Step, 'Validating data...');
         if (typeof updateData.api_key !== 'undefined' &&
             updateData.api_key !== null &&
-            updateData.api_key !== mergedRow.api_key) {
+            updateData.api_key !== row.api_key) {
             const uniqueKey = { api_key: updateData.api_key };
             debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
             debug.write(node_debug_1.MessageType.Step, 'Checking unique key...');

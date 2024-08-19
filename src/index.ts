@@ -21,9 +21,9 @@ export type PrimaryKey = {
 };
 
 export type Data = {
-  is_administrator: boolean;
-  is_enabled: boolean;
-  is_active: boolean;
+  is_administrator?: boolean;
+  is_enabled?: boolean;
+  is_active?: boolean;
   api_key?: string | null;
 };
 
@@ -117,7 +117,7 @@ export const update = async (
     if (
       typeof updateData.api_key !== 'undefined' &&
       updateData.api_key !== null &&
-      updateData.api_key !== mergedRow.api_key
+      updateData.api_key !== row.api_key
     ) {
       const uniqueKey = { api_key: updateData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
