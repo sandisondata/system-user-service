@@ -8,7 +8,6 @@ export type Data = {
     is_active?: boolean;
     api_key?: string | null;
 };
-export declare const dataColumnNames: string[];
 export type CreateData = PrimaryKey & Data;
 export type Row = PrimaryKey & Required<Data>;
 export type UpdateData = Partial<Data>;

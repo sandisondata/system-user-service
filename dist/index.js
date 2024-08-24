@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_ = exports.update = exports.findOne = exports.find = exports.create = exports.dataColumnNames = void 0;
+exports.delete_ = exports.update = exports.findOne = exports.find = exports.create = void 0;
 const database_helpers_1 = require("database-helpers");
 const node_debug_1 = require("node-debug");
 const node_utilities_1 = require("node-utilities");
@@ -17,12 +17,14 @@ const debugSource = 'user.service';
 const debugRows = 3;
 const tableName = '_users';
 const instanceName = 'user';
-exports.dataColumnNames = [
+const primaryKeyColumnNames = ['user_uuid'];
+const dataColumnNames = [
     'is_administrator',
     'is_enabled',
     'is_active',
     'api_key',
 ];
+const columnNames = [...primaryKeyColumnNames, ...dataColumnNames];
 const create = (query, createData) => __awaiter(void 0, void 0, void 0, function* () {
     const debug = new node_debug_1.Debug(`${debugSource}.create`);
     debug.write(node_debug_1.MessageType.Entry, `createData=${JSON.stringify(createData)}`);
@@ -59,7 +61,7 @@ const findOne = (query, primaryKey) => __awaiter(void 0, void 0, void 0, functio
     const debug = new node_debug_1.Debug(`${debugSource}.findOne`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
-    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey));
+    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, { columnNames: columnNames }));
     debug.write(node_debug_1.MessageType.Exit, `row=${JSON.stringify(row)}`);
     return row;
 });
@@ -68,11 +70,11 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
     const debug = new node_debug_1.Debug(`${debugSource}.update`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)};updateData=${JSON.stringify(updateData)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
-    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, true));
+    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, { columnNames: columnNames, forUpdate: true }));
     debug.write(node_debug_1.MessageType.Value, `row=${JSON.stringify(row)}`);
     const mergedRow = Object.assign({}, row, updateData);
     let updatedRow = Object.assign({}, mergedRow);
-    if (!(0, node_utilities_1.objectsEqual)((0, node_utilities_1.pick)(mergedRow, exports.dataColumnNames), (0, node_utilities_1.pick)(row, exports.dataColumnNames))) {
+    if (!(0, node_utilities_1.objectsEqual)((0, node_utilities_1.pick)(mergedRow, dataColumnNames), (0, node_utilities_1.pick)(row, dataColumnNames))) {
         debug.write(node_debug_1.MessageType.Step, 'Validating data...');
         if (typeof updateData.api_key !== 'undefined' &&
             updateData.api_key !== null &&
@@ -83,7 +85,7 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
             yield (0, database_helpers_1.checkUniqueKey)(query, tableName, instanceName, uniqueKey);
         }
         debug.write(node_debug_1.MessageType.Step, 'Updating row...');
-        updatedRow = (yield (0, database_helpers_1.updateRow)(query, tableName, primaryKey, updateData));
+        updatedRow = (yield (0, database_helpers_1.updateRow)(query, tableName, primaryKey, updateData, columnNames));
     }
     debug.write(node_debug_1.MessageType.Exit, `updatedRow=${JSON.stringify(updatedRow)}`);
     return updatedRow;
@@ -93,7 +95,7 @@ const delete_ = (query, primaryKey) => __awaiter(void 0, void 0, void 0, functio
     const debug = new node_debug_1.Debug(`${debugSource}.delete`);
     debug.write(node_debug_1.MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Finding row by primary key...');
-    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, true));
+    const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, { forUpdate: true }));
     debug.write(node_debug_1.MessageType.Value, `row=${JSON.stringify(row)}`);
     debug.write(node_debug_1.MessageType.Step, 'Deleting row...');
     yield (0, database_helpers_1.deleteRow)(query, tableName, primaryKey);

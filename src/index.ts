@@ -16,6 +16,15 @@ const debugRows = 3;
 const tableName = '_users';
 const instanceName = 'user';
 
+const primaryKeyColumnNames = ['user_uuid'];
+const dataColumnNames = [
+  'is_administrator',
+  'is_enabled',
+  'is_active',
+  'api_key',
+];
+const columnNames = [...primaryKeyColumnNames, ...dataColumnNames];
+
 export type PrimaryKey = {
   user_uuid: string;
 };
@@ -26,13 +35,6 @@ export type Data = {
   is_active?: boolean;
   api_key?: string | null;
 };
-
-export const dataColumnNames = [
-  'is_administrator',
-  'is_enabled',
-  'is_active',
-  'api_key',
-];
 
 export type CreateData = PrimaryKey & Data;
 export type Row = PrimaryKey & Required<Data>;
@@ -84,6 +86,7 @@ export const findOne = async (query: Query, primaryKey: PrimaryKey) => {
     tableName,
     instanceName,
     primaryKey,
+    { columnNames: columnNames },
   )) as Row;
   debug.write(MessageType.Exit, `row=${JSON.stringify(row)}`);
   return row;
@@ -105,7 +108,7 @@ export const update = async (
     tableName,
     instanceName,
     primaryKey,
-    true,
+    { columnNames: columnNames, forUpdate: true },
   )) as Row;
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   const mergedRow: Row = Object.assign({}, row, updateData);
@@ -130,6 +133,7 @@ export const update = async (
       tableName,
       primaryKey,
       updateData,
+      columnNames,
     )) as Row;
   }
   debug.write(MessageType.Exit, `updatedRow=${JSON.stringify(updatedRow)}`);
@@ -145,7 +149,7 @@ export const delete_ = async (query: Query, primaryKey: PrimaryKey) => {
     tableName,
     instanceName,
     primaryKey,
-    true,
+    { forUpdate: true },
   )) as Row;
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   debug.write(MessageType.Step, 'Deleting row...');
