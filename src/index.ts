@@ -112,16 +112,13 @@ export const update = async (
   )) as Row;
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   const mergedRow: Row = Object.assign({}, row, updateData);
+  debug.write(MessageType.Value, `mergedRow=${JSON.stringify(mergedRow)}`);
   let updatedRow: Row = Object.assign({}, mergedRow);
   if (
     !objectsEqual(pick(mergedRow, dataColumnNames), pick(row, dataColumnNames))
   ) {
     debug.write(MessageType.Step, 'Validating data...');
-    if (
-      typeof updateData.api_key !== 'undefined' &&
-      updateData.api_key !== null &&
-      updateData.api_key !== row.api_key
-    ) {
+    if (mergedRow.api_key !== null && mergedRow.api_key !== row.api_key) {
       const uniqueKey = { api_key: updateData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
       debug.write(MessageType.Step, 'Checking unique key...');

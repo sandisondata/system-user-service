@@ -73,12 +73,11 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
     const row = (yield (0, database_helpers_1.findByPrimaryKey)(query, tableName, instanceName, primaryKey, { columnNames: columnNames, forUpdate: true }));
     debug.write(node_debug_1.MessageType.Value, `row=${JSON.stringify(row)}`);
     const mergedRow = Object.assign({}, row, updateData);
+    debug.write(node_debug_1.MessageType.Value, `mergedRow=${JSON.stringify(mergedRow)}`);
     let updatedRow = Object.assign({}, mergedRow);
     if (!(0, node_utilities_1.objectsEqual)((0, node_utilities_1.pick)(mergedRow, dataColumnNames), (0, node_utilities_1.pick)(row, dataColumnNames))) {
         debug.write(node_debug_1.MessageType.Step, 'Validating data...');
-        if (typeof updateData.api_key !== 'undefined' &&
-            updateData.api_key !== null &&
-            updateData.api_key !== row.api_key) {
+        if (mergedRow.api_key !== null && mergedRow.api_key !== row.api_key) {
             const uniqueKey = { api_key: updateData.api_key };
             debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
             debug.write(node_debug_1.MessageType.Step, 'Checking unique key...');
