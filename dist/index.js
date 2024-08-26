@@ -32,7 +32,6 @@ const create = (query, createData) => __awaiter(void 0, void 0, void 0, function
     debug.write(node_debug_1.MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
     debug.write(node_debug_1.MessageType.Step, 'Checking primary key...');
     yield (0, database_helpers_1.checkPrimaryKey)(query, tableName, instanceName, primaryKey);
-    debug.write(node_debug_1.MessageType.Step, 'Validating data...');
     if (typeof createData.api_key !== 'undefined' &&
         createData.api_key !== null) {
         const uniqueKey = { api_key: createData.api_key };
@@ -76,7 +75,6 @@ const update = (query, primaryKey, updateData) => __awaiter(void 0, void 0, void
     debug.write(node_debug_1.MessageType.Value, `mergedRow=${JSON.stringify(mergedRow)}`);
     let updatedRow = Object.assign({}, mergedRow);
     if (!(0, node_utilities_1.objectsEqual)((0, node_utilities_1.pick)(mergedRow, dataColumnNames), (0, node_utilities_1.pick)(row, dataColumnNames))) {
-        debug.write(node_debug_1.MessageType.Step, 'Validating data...');
         if (mergedRow.api_key !== null && mergedRow.api_key !== row.api_key) {
             const uniqueKey = { api_key: updateData.api_key };
             debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);

@@ -47,7 +47,6 @@ export const create = async (query: Query, createData: CreateData) => {
   debug.write(MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Checking primary key...');
   await checkPrimaryKey(query, tableName, instanceName, primaryKey);
-  debug.write(MessageType.Step, 'Validating data...');
   if (
     typeof createData.api_key !== 'undefined' &&
     createData.api_key !== null
@@ -117,7 +116,6 @@ export const update = async (
   if (
     !objectsEqual(pick(mergedRow, dataColumnNames), pick(row, dataColumnNames))
   ) {
-    debug.write(MessageType.Step, 'Validating data...');
     if (mergedRow.api_key !== null && mergedRow.api_key !== row.api_key) {
       const uniqueKey = { api_key: updateData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
