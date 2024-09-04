@@ -35,12 +35,12 @@ export type Data = {
 };
 
 export type CreateData = PrimaryKey & Data;
-export type CreatedRow = Required<PrimaryKey> & Required<Data>;
+export type CreatedRow = Row;
 
 export type Row = Required<PrimaryKey> & Required<Data>;
 
 export type UpdateData = Partial<Data>;
-export type UpdatedRow = Required<PrimaryKey> & Required<Data>;
+export type UpdatedRow = Row;
 
 export const create = async (query: Query, createData: CreateData) => {
   const debug = new Debug(`${debugSource}.create`);
@@ -121,7 +121,7 @@ export const update = async (
   debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
   const mergedRow: Row = Object.assign({}, row, updateData);
   debug.write(MessageType.Value, `mergedRow=${JSON.stringify(mergedRow)}`);
-  let updatedRow: Row = Object.assign({}, mergedRow);
+  let updatedRow: UpdatedRow = Object.assign({}, mergedRow);
   if (
     !objectsEqual(pick(mergedRow, dataColumnNames), pick(row, dataColumnNames))
   ) {

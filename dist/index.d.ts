@@ -9,11 +9,11 @@ export type Data = {
     api_key?: string | null;
 };
 export type CreateData = PrimaryKey & Data;
-export type CreatedRow = Required<PrimaryKey> & Required<Data>;
+export type CreatedRow = Row;
 export type Row = Required<PrimaryKey> & Required<Data>;
 export type UpdateData = Partial<Data>;
-export type UpdatedRow = Required<PrimaryKey> & Required<Data>;
-export declare const create: (query: Query, createData: CreateData) => Promise<CreatedRow>;
+export type UpdatedRow = Row;
+export declare const create: (query: Query, createData: CreateData) => Promise<Row>;
 export declare const find: (query: Query) => Promise<Row[]>;
 export declare const findOne: (query: Query, primaryKey: PrimaryKey) => Promise<Row>;
 export declare const update: (query: Query, primaryKey: PrimaryKey, updateData: UpdateData) => Promise<Row>;
