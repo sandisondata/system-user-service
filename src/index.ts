@@ -25,7 +25,9 @@ const dataColumnNames = [
 ];
 const columnNames = [...primaryKeyColumnNames, ...dataColumnNames];
 
-export type PrimaryKey = { uuid?: string };
+export type PrimaryKey = {
+  uuid?: string;
+};
 
 export type Data = {
   is_administrator?: boolean;
