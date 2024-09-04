@@ -88,10 +88,7 @@ export const find = async (query: Query) => {
   return rows;
 };
 
-export const findOne = async (
-  query: Query,
-  primaryKey: PrimaryKey,
-): Promise<Row> => {
+export const findOne = async (query: Query, primaryKey: PrimaryKey) => {
   const debug = new Debug(`${debugSource}.findOne`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
