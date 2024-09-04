@@ -16,7 +16,7 @@ const debugRows = 3;
 const tableName = '_users';
 const instanceName = 'user';
 
-const primaryKeyColumnNames = ['user_uuid'];
+const primaryKeyColumnNames = ['uuid'];
 const dataColumnNames = [
   'is_administrator',
   'is_enabled',
@@ -25,9 +25,7 @@ const dataColumnNames = [
 ];
 const columnNames = [...primaryKeyColumnNames, ...dataColumnNames];
 
-export type PrimaryKey = {
-  user_uuid: string;
-};
+export type PrimaryKey = { uuid?: string };
 
 export type Data = {
   is_administrator?: boolean;
@@ -37,16 +35,22 @@ export type Data = {
 };
 
 export type CreateData = PrimaryKey & Data;
-export type Row = PrimaryKey & Required<Data>;
+export type CreatedRow = Required<PrimaryKey> & Required<Data>;
+
+export type Row = Required<PrimaryKey> & Required<Data>;
+
 export type UpdateData = Partial<Data>;
+export type UpdatedRow = Required<PrimaryKey> & Required<Data>;
 
 export const create = async (query: Query, createData: CreateData) => {
   const debug = new Debug(`${debugSource}.create`);
   debug.write(MessageType.Entry, `createData=${JSON.stringify(createData)}`);
-  const primaryKey: PrimaryKey = { user_uuid: createData.user_uuid };
-  debug.write(MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
-  debug.write(MessageType.Step, 'Checking primary key...');
-  await checkPrimaryKey(query, tableName, instanceName, primaryKey);
+  if (typeof createData.uuid !== 'undefined') {
+    const primaryKey: PrimaryKey = { uuid: createData.uuid };
+    debug.write(MessageType.Value, `primaryKey=${JSON.stringify(primaryKey)}`);
+    debug.write(MessageType.Step, 'Checking primary key...');
+    await checkPrimaryKey(query, tableName, instanceName, primaryKey);
+  }
   if (
     typeof createData.api_key !== 'undefined' &&
     createData.api_key !== null
@@ -57,7 +61,12 @@ export const create = async (query: Query, createData: CreateData) => {
     await checkUniqueKey(query, tableName, instanceName, uniqueKey);
   }
   debug.write(MessageType.Step, 'Creating row...');
-  const createdRow = (await createRow(query, tableName, createData)) as Row;
+  const createdRow = (await createRow(
+    query,
+    tableName,
+    createData,
+    columnNames,
+  )) as CreatedRow;
   debug.write(MessageType.Exit, `createdRow=${JSON.stringify(createdRow)}`);
   return createdRow;
 };
@@ -67,7 +76,7 @@ export const find = async (query: Query) => {
   const debug = new Debug(`${debugSource}.find`);
   debug.write(MessageType.Entry);
   debug.write(MessageType.Step, 'Finding rows...');
-  const rows = (await query(`SELECT * FROM ${tableName} ORDER BY user_uuid`))
+  const rows = (await query(`SELECT * FROM ${tableName} ORDER BY uuid`))
     .rows as Row[];
   debug.write(
     MessageType.Exit,
@@ -129,7 +138,7 @@ export const update = async (
       primaryKey,
       updateData,
       columnNames,
-    )) as Row;
+    )) as UpdatedRow;
   }
   debug.write(MessageType.Exit, `updatedRow=${JSON.stringify(updatedRow)}`);
   return updatedRow;
@@ -139,14 +148,9 @@ export const delete_ = async (query: Query, primaryKey: PrimaryKey) => {
   const debug = new Debug(`${debugSource}.delete`);
   debug.write(MessageType.Entry, `primaryKey=${JSON.stringify(primaryKey)}`);
   debug.write(MessageType.Step, 'Finding row by primary key...');
-  const row = (await findByPrimaryKey(
-    query,
-    tableName,
-    instanceName,
-    primaryKey,
-    { forUpdate: true },
-  )) as Row;
-  debug.write(MessageType.Value, `row=${JSON.stringify(row)}`);
+  await findByPrimaryKey(query, tableName, instanceName, primaryKey, {
+    forUpdate: true,
+  });
   debug.write(MessageType.Step, 'Deleting row...');
   await deleteRow(query, tableName, primaryKey);
   debug.write(MessageType.Exit);

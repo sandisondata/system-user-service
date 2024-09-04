@@ -3,9 +3,7 @@ import assert from 'node:assert/strict';
 
 import { Database } from 'database';
 import { Debug, MessageType } from 'node-debug';
-import { create, delete_, find, findOne, update } from '../dist';
-
-import { v4 as uuidv4 } from 'uuid';
+import { create, CreatedRow, delete_, find, findOne, update } from '../dist';
 
 describe('main', (suiteContext) => {
   Debug.initialise(true);
@@ -15,14 +13,14 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.before`);
     debug.write(MessageType.Entry);
     database = Database.getInstance();
-    uuid = uuidv4();
     debug.write(MessageType.Exit);
   });
   it('create', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      await create(query, { user_uuid: uuid });
+      const createdRow = (await create(query, {})) as CreatedRow;
+      uuid = createdRow.uuid;
     });
     debug.write(MessageType.Exit);
     assert.ok(true);
@@ -37,7 +35,7 @@ describe('main', (suiteContext) => {
   it('findOne', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
-    await findOne(database.query, { user_uuid: uuid });
+    await findOne(database.query, { uuid: uuid });
     debug.write(MessageType.Exit);
     assert.ok(true);
   });
@@ -47,7 +45,7 @@ describe('main', (suiteContext) => {
     await database.transaction(async (query) => {
       await update(
         query,
-        { user_uuid: uuid },
+        { uuid: uuid },
         { is_enabled: true, is_active: true, api_key: '<api_key>' },
       );
     });
@@ -58,7 +56,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      await delete_(query, { user_uuid: uuid });
+      await delete_(query, { uuid: uuid });
     });
     debug.write(MessageType.Exit);
     assert.ok(true);
