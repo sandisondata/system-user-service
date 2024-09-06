@@ -26,7 +26,7 @@ const dataColumnNames = [
 const columnNames = [...primaryKeyColumnNames, ...dataColumnNames];
 
 export type PrimaryKey = {
-  uuid?: string;
+  uuid: string;
 };
 
 export type Data = {
@@ -36,10 +36,10 @@ export type Data = {
   api_key?: string | null;
 };
 
-export type CreateData = PrimaryKey & Data;
+export type CreateData = Partial<PrimaryKey> & Data;
 export type CreatedRow = Row;
 
-export type Row = Required<PrimaryKey> & Required<Data>;
+export type Row = PrimaryKey & Required<Data>;
 
 export type UpdateData = Partial<Data>;
 export type UpdatedRow = Row;

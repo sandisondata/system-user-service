@@ -1,6 +1,6 @@
 import { Query } from 'database';
 export type PrimaryKey = {
-    uuid?: string;
+    uuid: string;
 };
 export type Data = {
     is_administrator?: boolean;
@@ -8,9 +8,9 @@ export type Data = {
     is_active?: boolean;
     api_key?: string | null;
 };
-export type CreateData = PrimaryKey & Data;
+export type CreateData = Partial<PrimaryKey> & Data;
 export type CreatedRow = Row;
-export type Row = Required<PrimaryKey> & Required<Data>;
+export type Row = PrimaryKey & Required<Data>;
 export type UpdateData = Partial<Data>;
 export type UpdatedRow = Row;
 export declare const create: (query: Query, createData: CreateData) => Promise<CreatedRow>;
