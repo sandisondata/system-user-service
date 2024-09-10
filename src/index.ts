@@ -124,7 +124,7 @@ export const update = async (
     !objectsEqual(pick(mergedRow, dataColumnNames), pick(row, dataColumnNames))
   ) {
     if (mergedRow.api_key !== null && mergedRow.api_key !== row.api_key) {
-      const uniqueKey = { api_key: updateData.api_key };
+      const uniqueKey = { api_key: updateData.api_key! };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
       debug.write(MessageType.Step, 'Checking unique key...');
       await checkUniqueKey(query, tableName, instanceName, uniqueKey);
