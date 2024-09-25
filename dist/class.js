@@ -14,7 +14,6 @@ const database_helpers_1 = require("database-helpers");
 const node_debug_1 = require("node-debug");
 const repository_service_class_1 = require("repository-service-class");
 class RepositoryUserService extends repository_service_class_1.RepositoryService {
-    // Pre-hooks
     preCreate() {
         return __awaiter(this, void 0, void 0, function* () {
             const debug = new node_debug_1.Debug(`${this.debugSource}.preCreate`);

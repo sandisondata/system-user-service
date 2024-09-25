@@ -15,7 +15,6 @@ export type Data = {
 };
 
 export class RepositoryUserService extends RepositoryService<PrimaryKey, Data> {
-  // Pre-hooks
   async preCreate() {
     const debug = new Debug(`${this.debugSource}.preCreate`);
     debug.write(MessageType.Entry);
@@ -30,6 +29,7 @@ export class RepositoryUserService extends RepositoryService<PrimaryKey, Data> {
     }
     debug.write(MessageType.Exit);
   }
+
   async preUpdate() {
     const debug = new Debug(`${this.debugSource}.preUpdate`);
     debug.write(MessageType.Entry);
