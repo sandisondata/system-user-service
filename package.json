@@ -1,7 +1,7 @@
 {
   "name": "repository-user-service",
   "version": "1.0.0",
-  "description": "Structured Data Repository - User Service",
+  "description": "Repository User Service",
   "author": "Grant Fortington",
   "private": true,
   "license": "MIT",
@@ -15,7 +15,8 @@
     "database": "github:sandisondata/database",
     "database-helpers": "github:sandisondata/database-helpers",
     "node-debug": "github:gwfortington/node-debug",
-    "node-utilities": "github:gwfortington/node-utilities"
+    "node-utilities": "github:gwfortington/node-utilities",
+    "repository-service-class": "github:sandisondata/repository-service-class"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.6",
