@@ -1,4 +1,5 @@
 import { RepositoryUserService } from './class';
+
 export { CreateData, Data, PrimaryKey, Query, Row, UpdateData } from './class';
 
 const repositoryUserService = new RepositoryUserService(
