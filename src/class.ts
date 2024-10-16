@@ -1,6 +1,6 @@
 import { checkUniqueKey } from 'database-helpers';
 import { Debug, MessageType } from 'node-debug';
-import { RepositoryService } from 'repository-service-class';
+import { Service } from 'service-class';
 
 export type PrimaryKey = {
   uuid?: string;
@@ -13,7 +13,7 @@ export type Data = {
   api_key?: string | null;
 };
 
-export class RepositoryUserService extends RepositoryService<PrimaryKey, Data> {
+export class SystemUserService extends Service<PrimaryKey, Data, false> {
   async preCreate() {
     const debug = new Debug(`${this.debugSource}.preCreate`);
     debug.write(MessageType.Entry);
@@ -45,4 +45,4 @@ export class RepositoryUserService extends RepositoryService<PrimaryKey, Data> {
   }
 }
 
-export { CreateData, Query, Row, UpdateData } from 'repository-service-class';
+export { CreateData, Query, Row, UpdateData } from 'service-class';

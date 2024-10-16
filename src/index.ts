@@ -1,11 +1,11 @@
-import { RepositoryUserService } from './class';
+import { SystemUserService } from './class';
 
-const repositoryUserService = new RepositoryUserService(
-  'repository-user-service',
+export const systemUserService = new SystemUserService(
+  'system-user-service',
   '_users',
   ['uuid'],
   ['is_administrator', 'is_enabled', 'is_active', 'api_key'],
+  false,
 );
 
-export { repositoryUserService };
 export { CreateData, Data, PrimaryKey, Query, Row, UpdateData } from './class';

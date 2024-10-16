@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 
 import { Database } from 'database';
 import { Debug, MessageType } from 'node-debug';
-import { repositoryUserService } from '../dist';
+import { systemUserService } from '../dist';
 
 describe('main', (suiteContext) => {
-  Debug.initialise(true);
+  Debug.initialize(true);
   let database: Database;
   let uuid: string;
   before(() => {
@@ -19,7 +19,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      const row = await repositoryUserService.create(query, {
+      const row = await systemUserService.create(query, {
         api_key: '<api_key>',
       });
       uuid = row.uuid;
@@ -30,14 +30,14 @@ describe('main', (suiteContext) => {
   it('find', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
-    await repositoryUserService.find(database.query);
+    await systemUserService.find(database.query);
     debug.write(MessageType.Exit);
     assert.ok(true);
   });
   it('findOne', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
-    await repositoryUserService.findOne(database.query, { uuid: uuid });
+    await systemUserService.findOne(database.query, { uuid: uuid });
     debug.write(MessageType.Exit);
     assert.ok(true);
   });
@@ -45,7 +45,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      await repositoryUserService.update(
+      await systemUserService.update(
         query,
         { uuid: uuid },
         { is_enabled: true, is_active: true, api_key: '<new_api_key>' },
@@ -58,7 +58,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      await repositoryUserService.delete(query, { uuid: uuid });
+      await systemUserService.delete(query, { uuid: uuid });
     });
     debug.write(MessageType.Exit);
     assert.ok(true);
@@ -66,7 +66,7 @@ describe('main', (suiteContext) => {
   after(async () => {
     const debug = new Debug(`${suiteContext.name}.after`);
     debug.write(MessageType.Entry);
-    await database.shutdown();
+    await database.disconnect();
     debug.write(MessageType.Exit);
   });
 });

@@ -1,7 +1,7 @@
 {
-  "name": "repository-user-service",
+  "name": "system-user-service",
   "version": "1.0.0",
-  "description": "Repository User Service",
+  "description": "System User Service",
   "author": "Grant Fortington",
   "private": true,
   "license": "MIT",
@@ -16,7 +16,7 @@
     "database-helpers": "github:sandisondata/database-helpers",
     "node-debug": "github:gwfortington/node-debug",
     "node-utilities": "github:gwfortington/node-utilities",
-    "repository-service-class": "github:sandisondata/repository-service-class"
+    "service-class": "github:sandisondata/service-class"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.6",

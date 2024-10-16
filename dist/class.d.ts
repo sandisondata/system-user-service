@@ -1,4 +1,4 @@
-import { RepositoryService } from 'repository-service-class';
+import { Service } from 'service-class';
 export type PrimaryKey = {
     uuid?: string;
 };
@@ -8,8 +8,8 @@ export type Data = {
     is_active?: boolean;
     api_key?: string | null;
 };
-export declare class RepositoryUserService extends RepositoryService<PrimaryKey, Data> {
+export declare class SystemUserService extends Service<PrimaryKey, Data, false> {
     preCreate(): Promise<void>;
     preUpdate(): Promise<void>;
 }
-export { CreateData, Query, Row, UpdateData } from 'repository-service-class';
+export { CreateData, Query, Row, UpdateData } from 'service-class';
