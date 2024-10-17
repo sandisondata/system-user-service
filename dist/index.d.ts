@@ -1,3 +1,4 @@
-import { SystemUserService } from './class';
-export declare const systemUserService: SystemUserService;
-export { CreateData, Data, PrimaryKey, Query, Row, UpdateData } from './class';
+import { CreateData, Data, PrimaryKey, Query, Row, Service, UpdateData } from './class';
+export { CreateData, Data, PrimaryKey, Query, Row, UpdateData };
+declare const service: Service;
+export { service };

@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SystemUserService = void 0;
+exports.Service = void 0;
+const base_service_class_1 = require("base-service-class");
 const database_helpers_1 = require("database-helpers");
 const node_debug_1 = require("node-debug");
-const service_class_1 = require("service-class");
-class SystemUserService extends service_class_1.Service {
+class Service extends base_service_class_1.BaseService {
     preCreate() {
         return __awaiter(this, void 0, void 0, function* () {
             const debug = new node_debug_1.Debug(`${this.debugSource}.preCreate`);
@@ -43,4 +43,4 @@ class SystemUserService extends service_class_1.Service {
         });
     }
 }
-exports.SystemUserService = SystemUserService;
+exports.Service = Service;

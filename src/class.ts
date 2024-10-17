@@ -1,6 +1,6 @@
+import { BaseService } from 'base-service-class';
 import { checkUniqueKey } from 'database-helpers';
 import { Debug, MessageType } from 'node-debug';
-import { Service } from 'service-class';
 
 export type PrimaryKey = {
   uuid?: string;
@@ -13,7 +13,7 @@ export type Data = {
   api_key?: string | null;
 };
 
-export class SystemUserService extends Service<PrimaryKey, Data, false> {
+export class Service extends BaseService<PrimaryKey, Data, false> {
   async preCreate() {
     const debug = new Debug(`${this.debugSource}.preCreate`);
     debug.write(MessageType.Entry);
@@ -45,4 +45,4 @@ export class SystemUserService extends Service<PrimaryKey, Data, false> {
   }
 }
 
-export { CreateData, Query, Row, UpdateData } from 'service-class';
+export { CreateData, Query, Row, UpdateData } from 'base-service-class';

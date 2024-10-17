@@ -1,6 +1,16 @@
-import { SystemUserService } from './class';
+import {
+  CreateData,
+  Data,
+  PrimaryKey,
+  Query,
+  Row,
+  Service,
+  UpdateData,
+} from './class';
 
-export const systemUserService = new SystemUserService(
+export { CreateData, Data, PrimaryKey, Query, Row, UpdateData };
+
+const service = new Service(
   'system-user-service',
   '_users',
   ['uuid'],
@@ -8,4 +18,4 @@ export const systemUserService = new SystemUserService(
   false,
 );
 
-export { CreateData, Data, PrimaryKey, Query, Row, UpdateData } from './class';
+export { service };
