@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { Database } from 'database';
 import { Debug, MessageType } from 'node-debug';
-import { service } from '../dist';
+import { CreateData, PrimaryKey, service, UpdateData } from '../dist';
 
 describe('main', (suiteContext) => {
   Debug.initialize(true);
@@ -19,7 +19,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      const createData = { api_key: '<api_key>' };
+      const createData: CreateData = { api_key: '<api_key>' };
       const row = await service.create(query, createData);
       uuid = row.uuid;
     });
@@ -36,7 +36,7 @@ describe('main', (suiteContext) => {
   it('findOne', async (testContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
-    const primaryKey = { uuid: uuid };
+    const primaryKey: Required<PrimaryKey> = { uuid: uuid };
     await service.findOne(database.query, primaryKey);
     debug.write(MessageType.Exit);
     assert.ok(true);
@@ -45,8 +45,8 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      const primaryKey = { uuid: uuid };
-      const updateData = {
+      const primaryKey: Required<PrimaryKey> = { uuid: uuid };
+      const updateData: UpdateData = {
         is_enabled: true,
         is_active: true,
         api_key: '<new_api_key>',
@@ -60,7 +60,7 @@ describe('main', (suiteContext) => {
     const debug = new Debug(`${suiteContext.name}.test.${testContext.name}`);
     debug.write(MessageType.Entry);
     await database.transaction(async (query) => {
-      const primaryKey = { uuid: uuid };
+      const primaryKey: Required<PrimaryKey> = { uuid: uuid };
       await service.delete(query, primaryKey);
     });
     debug.write(MessageType.Exit);

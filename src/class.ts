@@ -8,14 +8,23 @@ export type PrimaryKey = {
   uuid?: string;
 };
 
-export type Data = {
+type Data = {
   is_administrator?: boolean;
   is_enabled?: boolean;
   is_active?: boolean;
   api_key?: string | null;
 };
 
-export class Service extends BaseService<PrimaryKey, Data, false> {
+export type CreateData = PrimaryKey & Data;
+export type Row = Required<PrimaryKey> & Required<Data>;
+export type UpdateData = Partial<Data>;
+
+export class Service extends BaseService<
+  PrimaryKey,
+  CreateData,
+  Row,
+  UpdateData
+> {
   async preCreate() {
     const debug = new Debug(`${this.debugSource}.preCreate`);
     debug.write(MessageType.Entry);

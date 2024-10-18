@@ -1,6 +1,13 @@
-import { Data, PrimaryKey, Query, Service } from './class';
+import {
+  CreateData,
+  PrimaryKey,
+  Query,
+  Row,
+  Service,
+  UpdateData,
+} from './class';
 
-export { Data, PrimaryKey, Query };
+export { CreateData, PrimaryKey, Query, Row, UpdateData };
 
 const service = new Service(
   'system-user-service',
