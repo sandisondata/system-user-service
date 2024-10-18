@@ -1,4 +1,4 @@
-import { CreateData, Data, PrimaryKey, Query, Row, Service, UpdateData } from './class';
-export { CreateData, Data, PrimaryKey, Query, Row, UpdateData };
+import { Data, PrimaryKey, Query, Service } from './class';
+export { Data, PrimaryKey, Query };
 declare const service: Service;
 export { service };

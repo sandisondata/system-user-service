@@ -1,6 +1,8 @@
-import { BaseService } from 'base-service-class';
+import { BaseService, Query } from 'base-service-class';
 import { checkUniqueKey } from 'database-helpers';
 import { Debug, MessageType } from 'node-debug';
+
+export { Query };
 
 export type PrimaryKey = {
   uuid?: string;
@@ -44,5 +46,3 @@ export class Service extends BaseService<PrimaryKey, Data, false> {
     debug.write(MessageType.Exit);
   }
 }
-
-export { CreateData, Query, Row, UpdateData } from 'base-service-class';
