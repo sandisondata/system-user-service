@@ -1,5 +1,6 @@
 import {
   CreateData,
+  Data,
   PrimaryKey,
   Query,
   Row,
@@ -7,7 +8,7 @@ import {
   UpdateData,
 } from './class';
 
-export { CreateData, PrimaryKey, Query, Row, UpdateData };
+export { CreateData, Data, PrimaryKey, Query, Row, UpdateData };
 
 const service = new Service(
   'system-user-service',

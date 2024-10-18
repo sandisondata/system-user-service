@@ -3,7 +3,7 @@ export { Query };
 export type PrimaryKey = {
     uuid?: string;
 };
-type Data = {
+export type Data = {
     is_administrator?: boolean;
     is_enabled?: boolean;
     is_active?: boolean;
