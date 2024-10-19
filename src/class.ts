@@ -16,14 +16,14 @@ export type Data = {
 };
 
 export type CreateData = PrimaryKey & Data;
-export type Row = Required<PrimaryKey> & Required<Data>;
 export type UpdateData = Partial<Data>;
+export type Row = Required<PrimaryKey> & Required<Data>;
 
 export class Service extends BaseService<
   PrimaryKey,
   CreateData,
-  Row,
-  UpdateData
+  UpdateData,
+  Row
 > {
   async preCreate() {
     const debug = new Debug(`${this.debugSource}.preCreate`);
