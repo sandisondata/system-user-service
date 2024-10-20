@@ -1,9 +1,8 @@
-import { BaseService, Query } from 'base-service-class';
-export { Query };
+import { BaseService } from 'base-service-class';
 export type PrimaryKey = {
     uuid?: string;
 };
-export type Data = {
+type Data = {
     is_administrator?: boolean;
     is_enabled?: boolean;
     is_active?: boolean;
@@ -16,3 +15,4 @@ export declare class Service extends BaseService<PrimaryKey, CreateData, UpdateD
     preCreate(): Promise<void>;
     preUpdate(): Promise<void>;
 }
+export {};

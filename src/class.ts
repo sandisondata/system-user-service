@@ -1,14 +1,12 @@
-import { BaseService, Query } from 'base-service-class';
+import { BaseService } from 'base-service-class';
 import { checkUniqueKey } from 'database-helpers';
 import { Debug, MessageType } from 'node-debug';
-
-export { Query };
 
 export type PrimaryKey = {
   uuid?: string;
 };
 
-export type Data = {
+type Data = {
   is_administrator?: boolean;
   is_enabled?: boolean;
   is_active?: boolean;
