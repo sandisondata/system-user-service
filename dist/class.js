@@ -18,8 +18,8 @@ class Service extends base_service_class_1.BaseService {
         return __awaiter(this, void 0, void 0, function* () {
             const debug = new node_debug_1.Debug(`${this.debugSource}.preCreate`);
             debug.write(node_debug_1.MessageType.Entry);
-            if (typeof this.createData.api_key !== 'undefined' &&
-                this.createData.api_key !== null) {
+            if (typeof this.createData.api_key != 'undefined' &&
+                this.createData.api_key != null) {
                 const uniqueKey = { api_key: this.createData.api_key };
                 debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
                 debug.write(node_debug_1.MessageType.Step, 'Checking unique key...');
@@ -32,7 +32,7 @@ class Service extends base_service_class_1.BaseService {
         return __awaiter(this, void 0, void 0, function* () {
             const debug = new node_debug_1.Debug(`${this.debugSource}.preUpdate`);
             debug.write(node_debug_1.MessageType.Entry);
-            if (typeof this.updateData.api_key !== 'undefined' &&
+            if (typeof this.updateData.api_key != 'undefined' &&
                 ![null, this.row.api_key].includes(this.updateData.api_key)) {
                 const uniqueKey = { api_key: this.updateData.api_key };
                 debug.write(node_debug_1.MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);

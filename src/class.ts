@@ -27,8 +27,8 @@ export class Service extends BaseService<
     const debug = new Debug(`${this.debugSource}.preCreate`);
     debug.write(MessageType.Entry);
     if (
-      typeof this.createData.api_key !== 'undefined' &&
-      this.createData.api_key !== null
+      typeof this.createData.api_key != 'undefined' &&
+      this.createData.api_key != null
     ) {
       const uniqueKey = { api_key: this.createData.api_key };
       debug.write(MessageType.Value, `uniqueKey=${JSON.stringify(uniqueKey)}`);
@@ -42,7 +42,7 @@ export class Service extends BaseService<
     const debug = new Debug(`${this.debugSource}.preUpdate`);
     debug.write(MessageType.Entry);
     if (
-      typeof this.updateData.api_key !== 'undefined' &&
+      typeof this.updateData.api_key != 'undefined' &&
       ![null, this.row.api_key].includes(this.updateData.api_key)
     ) {
       const uniqueKey = { api_key: this.updateData.api_key };
